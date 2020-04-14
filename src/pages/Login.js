@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { TableRow, TextField } from '@material-ui/core';
 import { withRouter } from "react-router-dom";
 import { post } from 'axios'; 
+import { login } from '../util/APiUtils';
 
 class Login extends Component {
     constructor(props) {
@@ -13,7 +14,6 @@ class Login extends Component {
         
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleChange = this.handleChange.bind(this)
-        this.handleLogin = this.handleLogin.bind(this)
     }
 
     handleChange(e) {
@@ -22,40 +22,41 @@ class Login extends Component {
         this.setState(nextState);
     }
 
-    // handleLogin(e) {
+    // handleSubmit(e){
     //     e.preventDefault();
-    //     const url = "/api/signin"
-    //     fetch(url, {
-    //         method: 'post',
-    //         body: JSON.stringify(this.state)
-    //     }).then(response => {
-    //         localStorage.setItem('accessToken', response.data)
-    //     },
+    //     login(this.state).then(
+    //         (response) => {
+    //             localStorage.setItem('accessToken', JSON.stringify(response.data));
+    //             console.log(response);
+    //         },
     //         this.props.history.push('/')
     //     )
     // }
+
     handleSubmit(e){
         e.preventDefault();
-        this.handleLogin().then(
-            response => {
-                localStorage.setItem('accessToken', response.data)
+        this.handleLogin()
+        .then(
+            (response) => {
+                localStorage.setItem('accessToken', JSON.stringify(response.data));
+                console.log(response);
             },
             this.props.history.push('/')
         )
     }
+
     handleLogin() {
         const url = '/api/signin';
-        const signinData = this.state;
+        const signinData = this.state; 
         const config = {
             header : {
-                "content-type" : "application/json"
+                'content-type' : 'application/json'
             }
         }
-        return post(url, signinData, config)
+        return post(url, signinData, config);
     }
 
     render() {
-        // const AntWrappedLoginForm = Form.create()(LoginForm)
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>

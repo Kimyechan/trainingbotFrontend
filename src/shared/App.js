@@ -5,9 +5,7 @@ import Exercise from '../pages/Exercise';
 import Community from '../pages/Community';
 import MyPage from '../pages/MyPage';
 import TrainingBot from '../pages/TrainingBot'
-import LoginForm from '../components/LoginForm';
 import SignUp from '../pages/SignUp';
-import SignUpForm from '../pages/SignUpForm';
 import Login from '../pages/Login';
 import Top from '../components/Top';
 

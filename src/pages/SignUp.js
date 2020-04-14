@@ -26,6 +26,7 @@ class SignUp extends Component {
             this.props.history.push("/")
         );
     }
+    
     addAccount(){
         const url = '/api/signup';
         const signUpData = this.state;
