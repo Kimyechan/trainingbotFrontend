@@ -39,7 +39,6 @@ class Login extends Component {
         .then(
             (response) => {
                 localStorage.setItem('accessToken', JSON.stringify(response.data));
-                console.log(response);
             },
             this.props.history.push('/')
         )

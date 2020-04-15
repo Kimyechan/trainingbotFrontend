@@ -11,11 +11,61 @@ import Top from '../components/Top';
 
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLogined: false
+        }
+
+        this.changeLoginState = this.changeLoginState.bind(this);
+    }
+
+    changeLoginState() {
+        if (localStorage.getItem('accessToken')) {
+            this.setState({
+                isLogined: true
+            })
+        } else {
+            this.setState({
+                isLogined: false
+            })
+        }
+    }
+    
+    loadCurrentUser(){
+        fetch("/api/currentUser", {
+            headers:{
+                'content-type' : 'application/json',
+                'Authorization' : 'Bearer ' + localStorage.getItem('acessToken')
+            },
+            method: "GET"
+        }).then(
+            this.changeLoginState(),
+            console.log(this.state.isLogined, localStorage.getItem('accessToken'))
+        )
+    }
+
+    componentDidMount(){
+        this.loadCurrentUser();
+        // this.changeLoginState();
+    }
+
     render() {
+        let accountBar;
+
+        if (this.state.isLogined) {
+            accountBar = <button>Logout</button>
+        } else {
+            accountBar =
+                <div>
+                    <Link to="/signin">Login</Link>
+                    <Link to="/signup">Signup</Link>
+                </div>
+        }
         return (
             <div>
                 <Link to="/">TRAINING BOT</Link><br></br>
-                <Top></Top>
+                {accountBar}
                 <ol>
                     <li><Link to="/exercise">exercise</Link></li>
                     <li><Link to="/community">community</Link></li>
