@@ -22,23 +22,13 @@ class Login extends Component {
         this.setState(nextState);
     }
 
-    // handleSubmit(e){
-    //     e.preventDefault();
-    //     login(this.state).then(
-    //         (response) => {
-    //             localStorage.setItem('accessToken', JSON.stringify(response.data));
-    //             console.log(response);
-    //         },
-    //         this.props.history.push('/')
-    //     )
-    // }
-
     handleSubmit(e){
         e.preventDefault();
         this.handleLogin()
         .then(
             (response) => {
                 localStorage.setItem('accessToken', JSON.stringify(response.data));
+                this.props.changeLoginState();
             },
             this.props.history.push('/')
         )

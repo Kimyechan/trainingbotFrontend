@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import { Home } from 'pages';
 import Exercise from '../pages/Exercise';
 import Community from '../pages/Community';
@@ -21,6 +21,7 @@ class App extends Component {
     }
 
     changeLoginState() {
+        console.log(this.state.isLogined)
         if (localStorage.getItem('accessToken')) {
             this.setState({
                 isLogined: true
@@ -31,41 +32,24 @@ class App extends Component {
             })
         }
     }
-    
-    loadCurrentUser(){
-        fetch("/api/currentUser", {
-            headers:{
-                'content-type' : 'application/json',
-                'Authorization' : 'Bearer ' + localStorage.getItem('acessToken')
-            },
-            method: "GET"
-        }).then(
-            this.changeLoginState(),
-            console.log(this.state.isLogined, localStorage.getItem('accessToken'))
-        )
-    }
 
-    componentDidMount(){
-        this.loadCurrentUser();
-        // this.changeLoginState();
+    componentDidMount() {
+        this.changeLoginState();
     }
 
     render() {
-        let accountBar;
-
-        if (this.state.isLogined) {
-            accountBar = <button>Logout</button>
-        } else {
-            accountBar =
-                <div>
-                    <Link to="/signin">Login</Link>
-                    <Link to="/signup">Signup</Link>
-                </div>
-        }
         return (
             <div>
                 <Link to="/">TRAINING BOT</Link><br></br>
-                {accountBar}
+                {/* {accountBar} */}
+                {this.state.isLogined ? (
+                    <button>Logout</button>
+                ) : (
+                        <div>
+                            <Link to="/signin">Login</Link>
+                            <Link to="/signup">Signup</Link>
+                        </div>
+                    )}
                 <ol>
                     <li><Link to="/exercise">exercise</Link></li>
                     <li><Link to="/community">community</Link></li>
@@ -76,7 +60,14 @@ class App extends Component {
                     <Route path="/exercise/:kind" component={TrainingBot} />
                     <Route path="/exercise" component={Exercise} />
                 </Switch>
-                <Route path="/signin" component={Login}></Route>
+                {/* <Route path="/signin" component={Login}></Route> */}
+                <Route
+                    path="/signin"
+                    render={props => (
+                        <Login isLogined={this.state.isLogined} {...props} changeLoginState={this.changeLoginState}>
+                        </Login>
+                    )}
+                ></Route>
                 <Route path="/signup" component={SignUp} />
                 <Route path="/community" component={Community} />
                 <Route path="/myPage" component={MyPage} />
