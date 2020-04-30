@@ -18,6 +18,7 @@ class App extends Component {
         }
 
         this.changeLoginState = this.changeLoginState.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     changeLoginState() {
@@ -33,6 +34,13 @@ class App extends Component {
         }
     }
 
+    handleLogout() {
+        localStorage.removeItem('accessToken')
+        this.setState({
+            isLogined: false
+        })
+    }
+
     componentDidMount() {
         this.changeLoginState();
     }
@@ -43,7 +51,7 @@ class App extends Component {
                 <Link to="/">TRAINING BOT</Link><br></br>
                 {/* {accountBar} */}
                 {this.state.isLogined ? (
-                    <button>Logout</button>
+                    <button onClick={this.handleLogout}>Logout</button>
                 ) : (
                         <div>
                             <Link to="/signin">Login</Link>
