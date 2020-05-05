@@ -27,7 +27,8 @@ class Login extends Component {
         this.handleLogin()
         .then(
             (response) => {
-                localStorage.setItem('accessToken', JSON.stringify(response.data));
+                // localStorage.setItem('accessToken', JSON.stringify(response.data));
+                localStorage.setItem('accessToken', JSON.stringify(response.data.accessToken));
                 this.props.changeLoginState();
             },
             this.props.history.push('/')

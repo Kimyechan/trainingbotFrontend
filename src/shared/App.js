@@ -22,7 +22,6 @@ class App extends Component {
     }
 
     changeLoginState() {
-        console.log(this.state.isLogined)
         if (localStorage.getItem('accessToken')) {
             this.setState({
                 isLogined: true
