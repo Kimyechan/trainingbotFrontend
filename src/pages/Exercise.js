@@ -6,7 +6,7 @@ class Exercise extends Component {
         super(props);
 
         this.state = {
-            exerciseName : ['squat', 'pushUp']
+            exerciseName : ['squat', 'pushUp', 'sideLateralRaise']
         }
     }
     render() {
