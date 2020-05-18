@@ -1,5 +1,6 @@
 import * as tf from '@tensorflow/tfjs';
 import * as tmPose from '@teachablemachine/pose';
+import axios from 'axios';
 
 // More API functions here:
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
@@ -19,7 +20,7 @@ export default async function initSideLateralRaise() {
     maxPredictions = model.getTotalClasses();
 
     // Convenience function to setup a webcam
-    const size = 200;
+    const size = 600;
     const flip = true; // whether to flip the webcam
     webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
     await webcam.setup(); // request access to the webcam
@@ -45,22 +46,27 @@ async function loop(timestamp) {
 var status = "up";
 var count = 0;
 
+export function countOutput(){
+    console.log(count)
+    return count;
+}
+
 async function predict() {
     // Prediction #1: run input through posenet
     // estimatePose can take in an image, video or canvas html element
     const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
     // Prediction 2: run input through teachable machine classification model
     const prediction = await model.predict(posenetOutput);
-    if (prediction[0].probability.toFixed(2) > 0.90) {
+    if (prediction[0].probability.toFixed(2) == 1.00) {
         if(status === "down"){
             count++;
             var audio = new Audio( "/voice/" + count%10 + ".mp3");
             audio.play();
         }
         status = "up" 
-    } else if (prediction[1].probability.toFixed(2) > 0.90) {
+    } else if (prediction[1].probability.toFixed(2) == 1.00) {
         status = "down"
-    } else if (prediction[2].probability.toFixed(2) === 1.00) {
+    } else if (prediction[2].probability.toFixed(2) > 0.50) {
         if(status === "up" || status === "down"){
             var audio = new Audio( "/voice/wrong.mp3");
             audio.play();
@@ -75,6 +81,7 @@ async function predict() {
 
     // finally draw the poses
     drawPose(pose);
+    return count;
 }
 
 function drawPose(pose) {
@@ -88,3 +95,7 @@ function drawPose(pose) {
         }
     }
 }
+
+// function finish() {
+//     axios.post
+// }
