@@ -5,55 +5,7 @@ import initsideLateralRaise from '../lib/sideLateralRaise';
 import countOutput from '../lib/sideLateralRaise';
 import * as tf from '@tensorflow/tfjs';
 import * as tmPose from '@teachablemachine/pose';
-
-// class TrainingBot extends Component {
-//     constructor(props) {
-//         super(props);
-
-//         this.state = {
-//             kind: this.props.match.params.kind,
-//             count: 0
-//         }
-//         this.init.bind(this);
-//     }
-
-//     init = () => {
-//         if (this.state.kind === 'squat') {
-//             return initSquat();
-//         } else if (this.state.kind === 'pushUp') {
-//             return initPushUp();
-//         } else if (this.state.kind === 'sideLateralRaise') {
-//             return initsideLateralRaise();
-//         }
-//     }
-
-//     finish = () => {
-//         if (this.state.kind === 'squat') {
-//             return initSquat();
-//         } else if (this.state.kind === 'pushUp') {
-//             return initPushUp();
-//         }
-//     }
-
-//     componentDidMount() {
-
-//     }
-
-//     render() {
-
-//         return (
-//             <div>
-//                 <button type="button" onClick={this.init}>Start</button>
-//                 <div><canvas id="canvas"></canvas></div>
-//                 <div id="label-container"></div>
-//                 {this.state.kind}
-//             </div>
-//         )
-//     }
-// }
-
-// export default TrainingBot;
-
+import { post } from 'axios';
 
 class TrainingBot extends Component {
     constructor(props) {
@@ -62,7 +14,7 @@ class TrainingBot extends Component {
         this.state = {
             kind: this.props.match.params.kind,
             status: "up",
-            count : 0
+            count: 0
         }
 
         this.initSideLateralRaise.bind(this);
@@ -71,7 +23,6 @@ class TrainingBot extends Component {
 
     initSideLateralRaise = async () => {
         const URL = "/my_model/sideLateralRaise/";
-        let model, webcam, ctx, labelContainer, maxPredictions;
         const modelURL = URL + "model.json";
         const metadataURL = URL + "metadata.json";
 
@@ -114,17 +65,17 @@ class TrainingBot extends Component {
         if (prediction[0].probability.toFixed(2) == 1.00) {
             if (this.state.status === "down") {
                 this.setState({
-                    count : this.state.count + 1,
+                    count: this.state.count + 1,
                 })
                 var audio = new Audio("/voice/" + this.state.count % 10 + ".mp3");
                 audio.play();
             }
             this.setState({
-                status : 'up'
+                status: 'up'
             })
         } else if (prediction[1].probability.toFixed(2) == 1.00) {
             this.setState({
-                status : 'down'
+                status: 'down'
             })
         } else if (prediction[2].probability.toFixed(2) > 0.90) {
             if (this.state.status === "up" || this.state.status === "down") {
@@ -132,7 +83,7 @@ class TrainingBot extends Component {
                 audio.play();
             }
             this.setState({
-                status : 'wrong'
+                status: 'wrong'
             })
         }
         for (let i = 0; i < window.$maxPredictions; i++) {
@@ -157,6 +108,36 @@ class TrainingBot extends Component {
         }
     }
 
+    finish = () => {
+        const url = "/api/saveExercise"
+        const data = {
+            kind: this.state.kind,
+            count: this.state.count
+        }
+        const config = {
+            headers: {
+                "Accept": "application/json",
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('accessToken'))
+            }
+        };
+        if (!localStorage.getItem('accessToken')) {
+            window.$webcam.stop();
+            this.props.history.push('/')
+            window.location.reload();
+        } else {
+            window.$webcam.stop();
+            // post(url, data, config).then(
+            //     this.props.history.push('/'),
+            //     window.location.reload()
+            // )
+            post(url, data, config)
+            window.location.reload()
+            this.props.history.push('/')
+
+
+        }
+    }
+
     render() {
 
         return (
@@ -166,6 +147,7 @@ class TrainingBot extends Component {
                 <div id="label-container"></div>
                 {this.state.kind}<br></br>
                 {this.state.count}
+                <button type="button" onClick={this.finish}>Finish</button>
             </div>
         )
     }
