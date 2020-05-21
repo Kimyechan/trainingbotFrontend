@@ -6,6 +6,7 @@ import countOutput from '../lib/sideLateralRaise';
 import * as tf from '@tensorflow/tfjs';
 import * as tmPose from '@teachablemachine/pose';
 import { post } from 'axios';
+import { TableRow, TextField } from '@material-ui/core';
 
 class TrainingBot extends Component {
     constructor(props) {
@@ -14,13 +15,32 @@ class TrainingBot extends Component {
         this.state = {
             kind: this.props.match.params.kind,
             status: "up",
-            count: 0
+            cycle: 0,
+            countPerCycle: 0,
+            count: 0,
+            completed: 0
         }
+
 
         this.initSideLateralRaise.bind(this);
     }
 
-
+    progress = () => {
+        this.setState({ completed: this.state.completed + 1 });
+        console.log(this.state.completed)
+    }
+    test = () => {
+        var refreshIntervalId = setInterval(
+            () => {
+                if (this.state.completed <= 9) {
+                    this.setState({ completed: this.state.completed + 1 });
+                    console.log(this.state.completed)
+                } else {
+                    clearInterval(refreshIntervalId)
+                    this.initSideLateralRaise()
+                }
+            }, 1000);
+    }
     initSideLateralRaise = async () => {
         const URL = "/my_model/sideLateralRaise/";
         const modelURL = URL + "model.json";
@@ -38,6 +58,7 @@ class TrainingBot extends Component {
         window.$webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
         await window.$webcam.setup(); // request access to the webcam
         await window.$webcam.play();
+
         window.requestAnimationFrame(this.loop);
 
         // append/get elements to the DOM
@@ -48,6 +69,7 @@ class TrainingBot extends Component {
         for (let i = 0; i < window.$maxPredictions; i++) { // and class labels
             window.$labelContainer.appendChild(document.createElement("div"));
         }
+
     }
 
     loop = async () => {
@@ -142,7 +164,14 @@ class TrainingBot extends Component {
 
         return (
             <div>
-                <button type="button" onClick={this.initSideLateralRaise}>Start</button>
+                {/* <button type="button" onClick={this.initSideLateralRaise}>Start</button>
+                <div><canvas id="canvas"></canvas></div>
+                <div id="label-container"></div>
+                {this.state.kind}<br></br>
+                {this.state.count}
+                <button type="button" onClick={this.finish}>Finish</button> */}
+                <button type="button" onClick={this.test}>Start</button>
+                <h2>Start 버튼을 누른뒤 10초 뒤에 시작합니다.</h2>
                 <div><canvas id="canvas"></canvas></div>
                 <div id="label-container"></div>
                 {this.state.kind}<br></br>

@@ -8,6 +8,7 @@ import TrainingBot from '../pages/TrainingBot'
 import SignUp from '../pages/SignUp';
 import Login from '../pages/Login';
 import Top from '../components/Top';
+import ExercisePurpose from '../components/ExercisePurpose';
 
 
 class App extends Component {
@@ -75,6 +76,7 @@ class App extends Component {
                         </Login>
                     )}
                 ></Route>
+                <Route path="/exercisepurpose/:kind" component={ExercisePurpose}/>
                 <Route path="/signup" component={SignUp} />
                 <Route path="/community" component={Community} />
                 <Route path="/myPage" component={MyPage} />
