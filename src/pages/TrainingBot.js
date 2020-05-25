@@ -20,7 +20,7 @@ class TrainingBot extends Component {
             count: 0, //count 세기
             cycle: this.props.match.params.cycle, //목표 설정한 cycle 횟수
             countPerCycle: this.props.match.params.countPerCycle, // 목표 설정한 count 횟수
-            completed: 0
+            completed: 0 //rest sec를 나타내기 위한 운동 완료 횟수
         }
 
 
@@ -99,7 +99,9 @@ class TrainingBot extends Component {
             if (this.state.status === "down") {
                 this.setState({
                     count: this.state.count + 1,
+                    completed : this.state.completed + 1
                 })
+                // var oldDate = new Date();
                 var audio = new Audio("/voice/" + this.state.count % 10 + ".mp3");
                 audio.play();
             }
@@ -108,7 +110,6 @@ class TrainingBot extends Component {
             if (this.state.count == this.state.countPerCycle) {
                 window.$webcam.pause();
                 this.setState({
-                    completed : 1,
                     count: 0,
                     countCycle: this.state.countCycle + 1
                 })
@@ -147,6 +148,14 @@ class TrainingBot extends Component {
             this.setState({
                 status: 'down'
             })
+            // var nowDate = new Date();
+            // var gap = nowDate - oldDate / 1000;
+            // console.log(gap)
+            // //up 에서 down으로 동작 변화시간이 3초 이내일 경우 천천히 동작하기를 알림
+            // if(gap < 3){
+            //     var audio = new Audio("/voice/timeGap.mp3");
+            //     audio.play();
+            // }
         } else if (prediction[2].probability.toFixed(2) > 0.90) {
             if (this.state.status === "up" || this.state.status === "down") {
                 var audio = new Audio("/voice/wrong.mp3");
@@ -200,8 +209,6 @@ class TrainingBot extends Component {
             post(url, data, config)
             window.location.reload()
             this.props.history.push('/')
-
-
         }
     }
 
