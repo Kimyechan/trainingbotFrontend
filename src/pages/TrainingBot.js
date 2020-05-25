@@ -15,9 +15,11 @@ class TrainingBot extends Component {
         this.state = {
             kind: this.props.match.params.kind,
             status: "up",
-            cycle: 0,
-            countPerCycle: 0,
-            count: 0,
+            sec : 30,
+            countCycle: 0, //cycle 횟수 세기
+            count: 0, //count 세기
+            cycle: this.props.match.params.cycle, //목표 설정한 cycle 횟수
+            countPerCycle: this.props.match.params.countPerCycle, // 목표 설정한 count 횟수
             completed: 0
         }
 
@@ -25,22 +27,31 @@ class TrainingBot extends Component {
         this.initSideLateralRaise.bind(this);
     }
 
-    progress = () => {
-        this.setState({ completed: this.state.completed + 1 });
-        console.log(this.state.completed)
-    }
+    // progress = () => {
+    //     this.setState({ completed: this.state.completed + 1 });
+    //     console.log(this.state.completed)
+    // }
+
+    // test = () => {
+    //     var refreshIntervalId = setInterval(
+    //         () => {
+    //             if (this.state.completed <= 9) {
+    //                 this.setState({ completed: this.state.completed + 1 });
+    //                 console.log(this.state.completed)
+    //             } else {
+    //                 clearInterval(refreshIntervalId)
+    //                 this.initSideLateralRaise()
+    //             }
+    //         }, 100);
+    // }
     test = () => {
-        var refreshIntervalId = setInterval(
+        var refreshIntervalId = setTimeout(
             () => {
-                if (this.state.completed <= 9) {
-                    this.setState({ completed: this.state.completed + 1 });
-                    console.log(this.state.completed)
-                } else {
-                    clearInterval(refreshIntervalId)
-                    this.initSideLateralRaise()
-                }
-            }, 1000);
+                clearInterval(refreshIntervalId)
+                this.initSideLateralRaise()
+            }, 10000);
     }
+
     initSideLateralRaise = async () => {
         const URL = "/my_model/sideLateralRaise/";
         const modelURL = URL + "model.json";
@@ -92,6 +103,43 @@ class TrainingBot extends Component {
                 var audio = new Audio("/voice/" + this.state.count % 10 + ".mp3");
                 audio.play();
             }
+
+            //cycle 당 count 목표 달성시 30초 휴식
+            if (this.state.count == this.state.countPerCycle) {
+                window.$webcam.pause();
+                this.setState({
+                    completed : 1,
+                    count: 0,
+                    countCycle: this.state.countCycle + 1
+                })
+
+                var refreshVar = setInterval(() => {
+                    if(this.state.sec == 0){
+                        clearInterval(refreshVar)
+                        this.setState({
+                            sec : 30
+                        })
+                    } else {
+                        this.setState({
+                            sec : this.state.sec - 1
+                        })
+                    }
+                }, 1000)
+
+                setTimeout(()=> {
+                    var audio = new Audio("/voice/rest.mp3");
+                    audio.play();
+                }, 1000);
+                
+                var refreshIntervalId = setTimeout(() => {
+                    window.$webcam.play()
+                    this.setState({
+                        completed : 0
+                    })
+                    clearTimeout(refreshIntervalId);
+                }, 30000);
+            }
+
             this.setState({
                 status: 'up'
             })
@@ -108,6 +156,7 @@ class TrainingBot extends Component {
                 status: 'wrong'
             })
         }
+
         for (let i = 0; i < window.$maxPredictions; i++) {
             const classPrediction =
                 prediction[i].className + ": " + prediction[i].probability.toFixed(2);
@@ -148,10 +197,6 @@ class TrainingBot extends Component {
             window.location.reload();
         } else {
             window.$webcam.stop();
-            // post(url, data, config).then(
-            //     this.props.history.push('/'),
-            //     window.location.reload()
-            // )
             post(url, data, config)
             window.location.reload()
             this.props.history.push('/')
@@ -164,18 +209,18 @@ class TrainingBot extends Component {
 
         return (
             <div>
-                {/* <button type="button" onClick={this.initSideLateralRaise}>Start</button>
-                <div><canvas id="canvas"></canvas></div>
-                <div id="label-container"></div>
-                {this.state.kind}<br></br>
-                {this.state.count}
-                <button type="button" onClick={this.finish}>Finish</button> */}
+                cycle : {this.props.match.params.cycle}<br></br>
+                countPerCycle : {this.props.match.params.countPerCycle}<br></br>
                 <button type="button" onClick={this.test}>Start</button>
                 <h2>Start 버튼을 누른뒤 10초 뒤에 시작합니다.</h2>
+                {this.state.completed == this.state.countPerCycle ?
+                    <h2>{this.state.sec}초 휴식!!</h2> : ""
+                }
                 <div><canvas id="canvas"></canvas></div>
                 <div id="label-container"></div>
                 {this.state.kind}<br></br>
-                {this.state.count}
+                countCycle : {this.state.countCycle}<br></br>
+                count : {this.state.count}<br></br>
                 <button type="button" onClick={this.finish}>Finish</button>
             </div>
         )

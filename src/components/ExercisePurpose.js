@@ -29,7 +29,7 @@ class ExercisePurpose extends Component {
                 <TableRow>
                     <TextField type="text" label="countPerCycle" name="countPerCycle" value={this.state.countPerCycle} onChange={this.handleChange}></TextField>
                 </TableRow>
-                <Link to={"/exercise/"+this.props.match.params.kind}>
+                <Link to={"/exercise/"+this.props.match.params.kind+"/"+this.state.cycle+"/"+this.state.countPerCycle}>
                     <button type="button">purposeSet</button>
                 </Link>
             </div>

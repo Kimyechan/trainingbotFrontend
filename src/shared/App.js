@@ -65,6 +65,7 @@ class App extends Component {
                 </ol>
                 <Route exact path="/" component={Home} />
                 <Switch>
+                    <Route path="/exercise/:kind/:cycle/:countPerCycle" component={TrainingBot} />
                     <Route path="/exercise/:kind" component={TrainingBot} />
                     <Route path="/exercise" component={Exercise} />
                 </Switch>
@@ -76,7 +77,7 @@ class App extends Component {
                         </Login>
                     )}
                 ></Route>
-                <Route path="/exercisepurpose/:kind" component={ExercisePurpose}/>
+                <Route path="/exercisepurpose/:kind" component={ExercisePurpose} />
                 <Route path="/signup" component={SignUp} />
                 <Route path="/community" component={Community} />
                 <Route path="/myPage" component={MyPage} />
