@@ -80,96 +80,7 @@ class TrainingBot extends Component {
         const { pose, posenetOutput } = await window.$model.estimatePose(window.$webcam.canvas);
         // Prediction 2: run input through teachable machine classification model
         const prediction = await window.$model.predict(posenetOutput);
-        // if (prediction[0].probability.toFixed(2) == 1.00) { //down
-        //     if (this.state.status === "down") {
-        //         var time = new Date().getTime();
-        //         this.setState({
-        //             count: this.state.count + 1,
-        //             completed: this.state.completed + 1,
-        //             oldDate: time
-        //         })
-        //         if (this.state.term == 0) {
-        //             var audio = new Audio("/voice/" + this.state.count % 10 + ".mp3");
-        //             audio.play();
-        //         }
-        //     }
 
-        //     //cycle 당 count 목표 달성시 30초 휴식
-        //     if (this.state.count == this.state.countPerCycle) {
-        //         window.$webcam.pause();
-        //         this.setState({
-        //             count: 0,
-        //             countCycle: this.state.countCycle + 1
-        //         })
-
-        //         var refreshVar = setInterval(() => {
-        //             if (this.state.sec == 0) {
-        //                 clearInterval(refreshVar)
-        //                 this.setState({
-        //                     sec: 30
-        //                 })
-        //             } else {
-        //                 this.setState({
-        //                     sec: this.state.sec - 1
-        //                 })
-        //             }
-        //         }, 1000)
-
-        //         setTimeout(() => {
-        //             var audio = new Audio("/voice/rest.mp3");
-        //             audio.play();
-        //         }, 1000);
-
-        //         var refreshIntervalId = setTimeout(() => {
-        //             window.$webcam.play()
-        //             this.setState({
-        //                 completed: 0
-        //             })
-        //             clearTimeout(refreshIntervalId);
-        //         }, 30000);
-        //     }
-
-        //     this.setState({
-        //         status: 'up'
-        //     })
-        // } else if (prediction[1].probability.toFixed(2) == 1.00) { //up
-        //     console.log("UP!!!!!!!!!!!!!!!")
-        //     if (this.state.status == 'up') {
-        //         var time = new Date().getTime();
-        //         this.setState({
-        //             nowDate: time
-        //         })
-        //         var gap = (this.state.nowDate - this.state.oldDate) / 1000;
-        //         //up 에서 down으로 동작 변화시간이 3초 이내일 경우 천천히 동작하기를 알림
-        //         if (gap < 5) {
-        //             this.setState({
-        //                 term: 1,
-        //                 count: this.state.count - 1,
-        //                 completed : this.state.completed - 1
-        //             })
-        //             var audio = new Audio("/voice/timeGap.mp3");
-        //             audio.play();
-        //             setTimeout(() => {
-        //                 this.setState({
-        //                     term: 0
-        //                 })
-        //             }, 30000)
-        //         }
-        //     }
-
-        //     this.setState({
-        //         status: 'down'
-        //     })
-
-        // } else if (prediction[2].probability.toFixed(2) > 0.90) {
-        //     if (this.state.status === "up" || this.state.status === "down") {
-        //         var audio = new Audio("/voice/wrong.mp3");
-        //         audio.play();
-        //     }
-        //     this.setState({
-        //         status: 'wrong'
-        //     })
-        // }
         if (prediction[0].probability.toFixed(2) == 1.00) { //down
             if (this.state.status == 'up') {
                 var time = new Date().getTime();
@@ -198,7 +109,6 @@ class TrainingBot extends Component {
             })
 
         } else if (prediction[1].probability.toFixed(2) == 1.00) { //up
-            console.log("UP!!!!!!!!!!!!!!!")
             if (this.state.status === "down") {
                 var time = new Date().getTime();
                 this.setState({
@@ -220,31 +130,40 @@ class TrainingBot extends Component {
                     countCycle: this.state.countCycle + 1
                 })
 
-                var refreshVar = setInterval(() => {
-                    if (this.state.sec == 0) {
-                        clearInterval(refreshVar)
-                        this.setState({
-                            sec: 30
-                        })
-                    } else {
-                        this.setState({
-                            sec: this.state.sec - 1
-                        })
-                    }
-                }, 1000)
+                if (this.state.cycle == this.state.countCycle) {
+                    setTimeout(() => {
+                        var audio = new Audio("/voice/finish.mp3");
+                        audio.play();
+                        window.$webcam.pause();
+                    }, 2000);
+                } else {
 
-                setTimeout(() => {
-                    var audio = new Audio("/voice/rest.mp3");
-                    audio.play();
-                }, 1000);
+                    var refreshVar = setInterval(() => {
+                        if (this.state.sec == 0) {
+                            clearInterval(refreshVar)
+                            this.setState({
+                                sec: 30
+                            })
+                        } else {
+                            this.setState({
+                                sec: this.state.sec - 1
+                            })
+                        }
+                    }, 1000)
 
-                var refreshIntervalId = setTimeout(() => {
-                    window.$webcam.play()
-                    this.setState({
-                        completed: 0
-                    })
-                    clearTimeout(refreshIntervalId);
-                }, 30000);
+                    setTimeout(() => {
+                        var audio = new Audio("/voice/rest.mp3");
+                        audio.play();
+                    }, 1000);
+
+                    var refreshIntervalId = setTimeout(() => {
+                        window.$webcam.play()
+                        this.setState({
+                            completed: 0
+                        })
+                        clearTimeout(refreshIntervalId);
+                    }, 30000);
+                }
             }
 
             this.setState({
@@ -319,7 +238,7 @@ class TrainingBot extends Component {
                 countPerCycle : {this.props.match.params.countPerCycle}<br></br>
                 <button type="button" onClick={this.test}>Start</button>
                 <h2>Start 버튼을 누른뒤 10초 뒤에 시작합니다.</h2>
-                {this.state.completed == this.state.countPerCycle ?
+                {this.state.completed == this.state.countPerCycle && this.state.cycle != this.state.countCycle ?
                     <h2>{this.state.sec}초 휴식!!</h2> : ""
                 }
                 <div><canvas id="canvas"></canvas></div>
