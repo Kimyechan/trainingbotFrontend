@@ -15,35 +15,20 @@ class TrainingBot extends Component {
         this.state = {
             kind: this.props.match.params.kind,
             status: "up",
-            sec : 30,
+            sec: 30,
             countCycle: 0, //cycle 횟수 세기
             count: 0, //count 세기
             cycle: this.props.match.params.cycle, //목표 설정한 cycle 횟수
             countPerCycle: this.props.match.params.countPerCycle, // 목표 설정한 count 횟수
-            completed: 0 //rest sec를 나타내기 위한 운동 완료 횟수
+            completed: 0, //rest sec를 나타내기 위한 운동 완료 횟수
+            oldDate: 0,
+            nowDate: 0
         }
 
 
         this.initSideLateralRaise.bind(this);
     }
 
-    // progress = () => {
-    //     this.setState({ completed: this.state.completed + 1 });
-    //     console.log(this.state.completed)
-    // }
-
-    // test = () => {
-    //     var refreshIntervalId = setInterval(
-    //         () => {
-    //             if (this.state.completed <= 9) {
-    //                 this.setState({ completed: this.state.completed + 1 });
-    //                 console.log(this.state.completed)
-    //             } else {
-    //                 clearInterval(refreshIntervalId)
-    //                 this.initSideLateralRaise()
-    //             }
-    //         }, 100);
-    // }
     test = () => {
         var refreshIntervalId = setTimeout(
             () => {
@@ -95,15 +80,136 @@ class TrainingBot extends Component {
         const { pose, posenetOutput } = await window.$model.estimatePose(window.$webcam.canvas);
         // Prediction 2: run input through teachable machine classification model
         const prediction = await window.$model.predict(posenetOutput);
-        if (prediction[0].probability.toFixed(2) == 1.00) {
+        // if (prediction[0].probability.toFixed(2) == 1.00) { //down
+        //     if (this.state.status === "down") {
+        //         var time = new Date().getTime();
+        //         this.setState({
+        //             count: this.state.count + 1,
+        //             completed: this.state.completed + 1,
+        //             oldDate: time
+        //         })
+        //         if (this.state.term == 0) {
+        //             var audio = new Audio("/voice/" + this.state.count % 10 + ".mp3");
+        //             audio.play();
+        //         }
+        //     }
+
+        //     //cycle 당 count 목표 달성시 30초 휴식
+        //     if (this.state.count == this.state.countPerCycle) {
+        //         window.$webcam.pause();
+        //         this.setState({
+        //             count: 0,
+        //             countCycle: this.state.countCycle + 1
+        //         })
+
+        //         var refreshVar = setInterval(() => {
+        //             if (this.state.sec == 0) {
+        //                 clearInterval(refreshVar)
+        //                 this.setState({
+        //                     sec: 30
+        //                 })
+        //             } else {
+        //                 this.setState({
+        //                     sec: this.state.sec - 1
+        //                 })
+        //             }
+        //         }, 1000)
+
+        //         setTimeout(() => {
+        //             var audio = new Audio("/voice/rest.mp3");
+        //             audio.play();
+        //         }, 1000);
+
+        //         var refreshIntervalId = setTimeout(() => {
+        //             window.$webcam.play()
+        //             this.setState({
+        //                 completed: 0
+        //             })
+        //             clearTimeout(refreshIntervalId);
+        //         }, 30000);
+        //     }
+
+        //     this.setState({
+        //         status: 'up'
+        //     })
+        // } else if (prediction[1].probability.toFixed(2) == 1.00) { //up
+        //     console.log("UP!!!!!!!!!!!!!!!")
+        //     if (this.state.status == 'up') {
+        //         var time = new Date().getTime();
+        //         this.setState({
+        //             nowDate: time
+        //         })
+        //         var gap = (this.state.nowDate - this.state.oldDate) / 1000;
+        //         //up 에서 down으로 동작 변화시간이 3초 이내일 경우 천천히 동작하기를 알림
+        //         if (gap < 5) {
+        //             this.setState({
+        //                 term: 1,
+        //                 count: this.state.count - 1,
+        //                 completed : this.state.completed - 1
+        //             })
+        //             var audio = new Audio("/voice/timeGap.mp3");
+        //             audio.play();
+        //             setTimeout(() => {
+        //                 this.setState({
+        //                     term: 0
+        //                 })
+        //             }, 30000)
+        //         }
+        //     }
+
+        //     this.setState({
+        //         status: 'down'
+        //     })
+
+        // } else if (prediction[2].probability.toFixed(2) > 0.90) {
+        //     if (this.state.status === "up" || this.state.status === "down") {
+        //         var audio = new Audio("/voice/wrong.mp3");
+        //         audio.play();
+        //     }
+        //     this.setState({
+        //         status: 'wrong'
+        //     })
+        // }
+        if (prediction[0].probability.toFixed(2) == 1.00) { //down
+            if (this.state.status == 'up') {
+                var time = new Date().getTime();
+                this.setState({
+                    nowDate: time
+                })
+                var gap = (this.state.nowDate - this.state.oldDate) / 1000;
+                console.log(this.state.gap)
+                //up 에서 down으로 동작 변화시간이 1초 이내일 경우 천천히 동작하기를 알림
+                if (gap < 1) {
+                    this.setState({
+                        count: this.state.count - 1,
+                        completed: this.state.completed - 1
+                    })
+                    var audio = new Audio("/voice/timeGap.mp3");
+                    audio.play();
+                    window.$webcam.pause();
+                    setTimeout(() => {
+                        window.$webcam.play()
+                    }, 3000)
+                }
+            }
+
+            this.setState({
+                status: 'down'
+            })
+
+        } else if (prediction[1].probability.toFixed(2) == 1.00) { //up
+            console.log("UP!!!!!!!!!!!!!!!")
             if (this.state.status === "down") {
+                var time = new Date().getTime();
                 this.setState({
                     count: this.state.count + 1,
-                    completed : this.state.completed + 1
+                    completed: this.state.completed + 1,
+                    oldDate: time
                 })
-                // var oldDate = new Date();
+
                 var audio = new Audio("/voice/" + this.state.count % 10 + ".mp3");
                 audio.play();
+
             }
 
             //cycle 당 count 목표 달성시 30초 휴식
@@ -115,27 +221,27 @@ class TrainingBot extends Component {
                 })
 
                 var refreshVar = setInterval(() => {
-                    if(this.state.sec == 0){
+                    if (this.state.sec == 0) {
                         clearInterval(refreshVar)
                         this.setState({
-                            sec : 30
+                            sec: 30
                         })
                     } else {
                         this.setState({
-                            sec : this.state.sec - 1
+                            sec: this.state.sec - 1
                         })
                     }
                 }, 1000)
 
-                setTimeout(()=> {
+                setTimeout(() => {
                     var audio = new Audio("/voice/rest.mp3");
                     audio.play();
                 }, 1000);
-                
+
                 var refreshIntervalId = setTimeout(() => {
                     window.$webcam.play()
                     this.setState({
-                        completed : 0
+                        completed: 0
                     })
                     clearTimeout(refreshIntervalId);
                 }, 30000);
@@ -144,22 +250,15 @@ class TrainingBot extends Component {
             this.setState({
                 status: 'up'
             })
-        } else if (prediction[1].probability.toFixed(2) == 1.00) {
-            this.setState({
-                status: 'down'
-            })
-            // var nowDate = new Date();
-            // var gap = nowDate - oldDate / 1000;
-            // console.log(gap)
-            // //up 에서 down으로 동작 변화시간이 3초 이내일 경우 천천히 동작하기를 알림
-            // if(gap < 3){
-            //     var audio = new Audio("/voice/timeGap.mp3");
-            //     audio.play();
-            // }
+
         } else if (prediction[2].probability.toFixed(2) > 0.90) {
             if (this.state.status === "up" || this.state.status === "down") {
                 var audio = new Audio("/voice/wrong.mp3");
                 audio.play();
+                window.$webcam.pause();
+                setTimeout(() => {
+                    window.$webcam.play()
+                }, 3000)
             }
             this.setState({
                 status: 'wrong'
