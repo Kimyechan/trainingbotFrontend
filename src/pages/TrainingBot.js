@@ -210,7 +210,8 @@ class TrainingBot extends Component {
         const url = "/api/saveExercise"
         const data = {
             kind: this.state.kind,
-            count: this.state.count
+            // count: this.state.count
+            count: this.state.countCycle * this.state.countPerCycle + this.state.count
         }
         const config = {
             headers: {
@@ -246,6 +247,7 @@ class TrainingBot extends Component {
                 {this.state.kind}<br></br>
                 countCycle : {this.state.countCycle}<br></br>
                 count : {this.state.count}<br></br>
+                totalCount : {this.state.countCycle * this.state.countPerCycle + this.state.count} <br></br>
                 <button type="button" onClick={this.finish}>Finish</button>
             </div>
         )
