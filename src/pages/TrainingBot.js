@@ -26,19 +26,20 @@ class TrainingBot extends Component {
         }
 
 
-        this.initSideLateralRaise.bind(this);
+        this.initExercise.bind(this);
     }
 
-    test = () => {
+    init = () => {
         var refreshIntervalId = setTimeout(
             () => {
                 clearInterval(refreshIntervalId)
-                this.initSideLateralRaise()
+                this.initExercise()
             }, 10000);
     }
 
-    initSideLateralRaise = async () => {
-        const URL = "/my_model/sideLateralRaise/";
+    initExercise = async () => {
+        // const URL = "/my_model/sideLateralRaise/";
+        const URL = "/my_model/"+ this.state.kind +"/";
         const modelURL = URL + "model.json";
         const metadataURL = URL + "metadata.json";
 
@@ -210,9 +211,10 @@ class TrainingBot extends Component {
         const url = "/api/saveExercise"
         const data = {
             kind: this.state.kind,
-            // count: this.state.count
-            count: this.state.countCycle * this.state.countPerCycle + this.state.count
+            count: this.state.countCycle * this.state.countPerCycle + this.state.count,
+            purposeCount: this.state.cycle * this.state.countPerCycle 
         }
+        
         const config = {
             headers: {
                 "Accept": "application/json",
@@ -237,7 +239,7 @@ class TrainingBot extends Component {
             <div>
                 cycle : {this.props.match.params.cycle}<br></br>
                 countPerCycle : {this.props.match.params.countPerCycle}<br></br>
-                <button type="button" onClick={this.test}>Start</button>
+                <button type="button" onClick={this.init}>Start</button>
                 <h2>Start 버튼을 누른뒤 10초 뒤에 시작합니다.</h2>
                 {this.state.completed == this.state.countPerCycle && this.state.cycle != this.state.countCycle ?
                     <h2>{this.state.sec}초 휴식!!</h2> : ""

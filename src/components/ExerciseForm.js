@@ -8,9 +8,6 @@ class ExerciseForm extends Component {
             <div>
                 <h2>{this.props.name}</h2>
                 <img src={"image/" + this.props.name + ".png"} alt={this.props.name} style={{ width: 256, height: 256 }}></img>
-                {/* <Link to={"/exercise/"+this.props.name}>
-                    <button type="button">ready</button>
-                </Link> */}
                 <Link to={"/exercisepurpose/"+this.props.name}>
                     <button type="button">ready</button>
                 </Link>
