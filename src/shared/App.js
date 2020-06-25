@@ -88,7 +88,7 @@ class App extends Component {
                             <Button color="inherit" onClick={this.handleLogout}>Logout</Button>
                         ) : (
                                 <div>
-                                    <Button color="inherit" component={RouterLink} to="/signin">Login</Button>
+                                    <Button color="inherit" component={RouterLink} to="/signin" exact={true}>Login</Button>
                                     <Button color="inherit" component={RouterLink} to="/signup">Signup</Button>
                                 </div>
                             )
@@ -96,13 +96,15 @@ class App extends Component {
                     </Toolbar>
                 </AppBar>
                 <Drawer open={this.state.toggle}>
-                    <MenuItem onClick={this.handleDrawerToggle}>Home</MenuItem>
+                    <MenuItem onClick={this.handleDrawerToggle}><Button color="inherit" component={RouterLink} to="/">Home</Button></MenuItem>
+                    <MenuItem onClick={this.handleDrawerToggle}><Button color="inherit" component={RouterLink} to="/exercise">Exercise</Button></MenuItem>
+                    <MenuItem onClick={this.handleDrawerToggle}><Button color="inherit" component={RouterLink} to="/community">Community</Button></MenuItem>
                 </Drawer>
-                <ol>
+                {/* <ol>
                     <li><Link component={RouterLink} to="/exercise">exercise</Link></li>
                     <li><Link component={RouterLink} to="/community">community</Link></li>
                     <li><Link component={RouterLink} to="/myPage">myPage</Link></li>
-                </ol>
+                </ol> */}
                 <Route exact path="/" component={Home} />
                 <Switch>
                     <Route path="/exercise/:kind/:cycle/:countPerCycle" component={TrainingBot} />
