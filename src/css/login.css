@@ -1,0 +1,49 @@
+.login{
+    width:500px;
+    height:500px;
+    clear: both;
+    margin : 100px auto;
+}
+
+p{
+    font-size : 50px;
+    width:500px;
+    text-align:center;
+    margin:0 auto;
+}
+
+.login_table{
+    text-align:center;
+    margin : 0 100px;
+}
+
+.MuiTableRow-root{
+    width:500px;
+    height:50px;
+    text-align:center;
+    margin: 0 auto;
+}
+
+.MuiFormControl-root{
+    width:300px;
+    height:75px;
+}
+
+/* .login_button{
+    text-align:center;
+    margin:0 100px;
+    clear:both;
+} */
+
+button{
+    background-color:white;
+    border:none;
+    color:black;
+    padding: 15px 30px;
+    text-align:center;
+    text-decoration:none;
+    display:inline-block;
+    font-size:20px;
+    margin:4px 2px;
+    cursor:pointer;
+}

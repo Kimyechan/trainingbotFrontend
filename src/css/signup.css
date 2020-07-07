@@ -1,0 +1,31 @@
+.signup{
+    width:500px;
+    height:500px;
+    clear: both;
+    margin : 100px auto;
+}
+
+p{
+    font-size : 50px;
+    width:500px;
+    text-align:center;
+    margin:0 auto;
+}
+
+.signup_table{
+    text-align:center;
+    margin:0 100px;
+}
+
+.MuiTableRow-root{
+    width:500px;
+    height:50px;
+    text-align:center;
+    margin:0 auto;
+}
+
+.signup_button{
+    text-align:center;
+    margin:0 100px;
+    clear:both;
+}

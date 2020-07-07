@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import {Link} from 'react-router-dom';
 
+import "../css/exercise.css";
+
 class ExerciseForm extends Component {
     
     render() {
         return (
             <div>
-                <h2>{this.props.name}</h2>
-                <img src={"image/" + this.props.name + ".png"} alt={this.props.name} style={{ width: 256, height: 256 }}></img>
+                <img className="img_view" src={"image/" + this.props.name + ".png"}></img>
                 <Link to={"/exercisepurpose/"+this.props.name}>
-                    <button type="button">ready</button>
+                    <button type="button">Ready</button>
                 </Link>
-
             </div>
         )
     }

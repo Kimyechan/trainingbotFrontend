@@ -8,6 +8,10 @@ import * as tmPose from '@teachablemachine/pose';
 import { post } from 'axios';
 import { TableRow, TextField } from '@material-ui/core';
 
+import Exercise from './Exercise';
+
+import "../css/exercise.css";
+
 class TrainingBot extends Component {
     constructor(props) {
         super(props);
@@ -39,7 +43,7 @@ class TrainingBot extends Component {
 
     initExercise = async () => {
         // const URL = "/my_model/sideLateralRaise/";
-        const URL = "/my_model/"+ this.state.kind +"/";
+        const URL = "/my_model/" + this.state.kind + "/";
         const modelURL = URL + "model.json";
         const metadataURL = URL + "metadata.json";
 
@@ -212,9 +216,9 @@ class TrainingBot extends Component {
         const data = {
             kind: this.state.kind,
             count: this.state.countCycle * this.state.countPerCycle + this.state.count,
-            purposeCount: this.state.cycle * this.state.countPerCycle 
+            purposeCount: this.state.cycle * this.state.countPerCycle
         }
-        
+
         const config = {
             headers: {
                 "Accept": "application/json",
@@ -236,21 +240,25 @@ class TrainingBot extends Component {
     render() {
 
         return (
-            <div>
-                cycle : {this.props.match.params.cycle}<br></br>
-                countPerCycle : {this.props.match.params.countPerCycle}<br></br>
-                <button type="button" onClick={this.init}>Start</button>
-                <h2>Start 버튼을 누른뒤 10초 뒤에 시작합니다.</h2>
-                {this.state.completed == this.state.countPerCycle && this.state.cycle != this.state.countCycle ?
-                    <h2>{this.state.sec}초 휴식!!</h2> : ""
-                }
-                <div><canvas id="canvas"></canvas></div>
-                <div id="label-container"></div>
-                {this.state.kind}<br></br>
-                countCycle : {this.state.countCycle}<br></br>
-                count : {this.state.count}<br></br>
-                totalCount : {this.state.countCycle * this.state.countPerCycle + this.state.count} <br></br>
-                <button type="button" onClick={this.finish}>Finish</button>
+            <div style={{width:'1000px', height:'800px', margin: 'auto auto'}}>
+                    <div className="exercise_head">
+                        <img style={{ width: '150px', height: '100px' }} src={"/image/" + this.state.kind + ".png"}></img>
+                        {this.state.kind}
+                    </div>
+
+                <div className="doexercise_view">
+                    <h2>Start 버튼을 누른뒤 10초 뒤에 시작합니다.</h2>
+                    {this.state.completed == this.state.countPerCycle && this.state.cycle != this.state.countCycle ?
+                        <h2>{this.state.sec}초 휴식!!</h2> : ""
+                    }
+                    <div><canvas id="canvas"></canvas></div>
+
+                <h2>CountCycle : {this.state.countCycle} / {this.props.match.params.cycle}</h2>
+                <h2>Count : {this.state.count} / {this.props.match.params.countPerCycle}</h2>
+                <h2>TotalCount : {this.state.countCycle * this.state.countPerCycle + this.state.count}</h2>
+                    <button type="button" onClick={this.init}>Start</button>
+                    <button type="button" onClick={this.finish}>Finish</button>
+                </div>
             </div>
         )
     }

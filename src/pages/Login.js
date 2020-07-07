@@ -2,21 +2,25 @@ import React, { Component } from 'react';
 import { TableRow, TextField } from '@material-ui/core';
 import { withRouter } from "react-router-dom";
 import { post } from 'axios';
-import { login } from '../util/APiUtils';
 
-import Button from '@material-ui/core/Button';
+import "../css/login.css"
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
+
             open: true,
+
+            open: true,
+
             userId: '',
             password: ''
         }
 
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.handlegoBack = this.handlegoBack.bind(this)
     }
 
     handleChange(e) {
@@ -25,12 +29,15 @@ class Login extends Component {
         this.setState(nextState);
     }
 
+    handlegoBack(e) {
+        this.props.history.goBack();
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         this.handleLogin()
             .then(
                 (response) => {
-                    // localStorage.setItem('accessToken', JSON.stringify(response.data));
                     localStorage.setItem('accessToken', JSON.stringify(response.data.accessToken));
                     this.props.changeLoginState();
                 },
@@ -51,16 +58,23 @@ class Login extends Component {
 
     render() {
         return (
-            <div>
-                <TableRow>
-                    <TextField type="text" label="ID" name="userId" value={this.state.userId} onChange={this.handleChange}></TextField>
-                </TableRow>
-                <TableRow>
-                    <TextField type="text" label="Password" name="password" value={this.state.password} onChange={this.handleChange}></TextField>
-                </TableRow>
-                <Button variant="contained" color="primary" onClick={this.handleSubmit}>로그인</Button>
-                <Button variant="outlined" color="primary" href="/">닫기</Button>
+        <div>
+            <div className="login">
+                <p>TRAINING BOT</p>
+                <div className="login_table">
+                    <div>
+                        <TableRow>
+                            <TextField type="text" label="ID" name="userId" value={this.state.userId} onChange={this.handleChange}></TextField>
+                        </TableRow>
+                        <TableRow>
+                            <TextField type="text" label="Password" name="password" value={this.state.password} onChange={this.handleChange}></TextField>
+                        </TableRow>
+                    </div>
+                        <button onClick={this.handleSubmit}>Login</button>
+                        <button onClick={this.handlegoBack}>Close</button>
+                </div>
             </div>
+        </div>
         )
     }
 }

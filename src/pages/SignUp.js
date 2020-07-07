@@ -4,6 +4,10 @@ import { TextField } from '@material-ui/core';
 import { post } from 'axios';
 import { withRouter } from "react-router-dom";
 
+
+
+import "../css/signup.css"
+
 import Button from '@material-ui/core/Button';
 
 class SignUp extends Component {
@@ -21,7 +25,7 @@ class SignUp extends Component {
 
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.handleValueChange = this.handleValueChange.bind(this);
-        this.handleClose = this.handleClose.bind(this);
+        this.handlegoBack = this.handlegoBack.bind(this);
     }
 
     handleFormSubmit(e) {
@@ -48,31 +52,34 @@ class SignUp extends Component {
         this.setState(nextState);
     }
 
-    handleClose(e) {
-        this.setState({
-            open: false
-        })
+    handlegoBack(e) {
+        this.props.history.goBack();
     }
 
     render() {
         return (
             <div>
-
-                <TableRow>
-                    <TextField type="text" label="ID" name="userId" value={this.state.userId} onChange={this.handleValueChange}></TextField>
-                </TableRow>
-                <TableRow>
-                    <TextField type="text" label="PassWord" name="password" value={this.state.password} onChange={this.handleValueChange}></TextField>
-                </TableRow>
-                <TableRow>
-                    <TextField type="text" label="Name" name="name" value={this.state.name} onChange={this.handleValueChange}></TextField>
-                </TableRow>
-                <TableRow>
-                    <TextField type="text" label="PhoneNumber" name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleValueChange}></TextField>
-                </TableRow>
-                <Button variant="contained" color="primary" onClick={this.handleFormSubmit}>Sign Up</Button>
-                <Button variant="outlined" color="primary" onClick={this.handleClose}>Close</Button>
-
+                <div className="signup">
+                    <p>TRAINING BOT</p>
+                    <div className="signup_table">
+                        <div>
+                            <TableRow>
+                                <TextField type="text" label="ID" name="userId" value={this.state.userId} onChange={this.handleValueChange}></TextField>
+                            </TableRow>
+                            <TableRow>
+                                <TextField type="text" label="Password" name="password" value={this.state.password} onChange={this.handleValueChange}></TextField>
+                            </TableRow>
+                            <TableRow>
+                                <TextField type="text" label="Name" name="name" value={this.state.name} onChange={this.handleValueChange}></TextField>
+                            </TableRow>
+                            <TableRow>
+                                <TextField type="text" label="PhoneNumber" name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleValueChange}></TextField>
+                            </TableRow>
+                        </div>
+                            <button onClick={this.handleFormSubmit}>Sign Up</button>
+                            <button onClick={this.handlegoBack}>Close</button>
+                    </div>
+                </div>
             </div>
         )
     }

@@ -1,0 +1,19 @@
+#content{
+	background: #fff;
+	width: 1000px;
+    margin: 0 auto;
+}
+
+ul{
+    list-style: none;
+}
+
+.clearfix {
+    overflow: auto;
+}
+
+.clearfix::after{
+	clear: both; /* float 해제 */
+	display: block;
+	content: "";
+}

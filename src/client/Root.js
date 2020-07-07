@@ -4,7 +4,7 @@ import App from 'shared/App';
 
 const Root = () => (
     <BrowserRouter>
-        <App/>
+        <App></App>
     </BrowserRouter>
 );
 

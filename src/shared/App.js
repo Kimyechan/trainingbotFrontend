@@ -21,7 +21,6 @@ import Login from '../pages/Login';
 
 import ExercisePurpose from '../components/ExercisePurpose';
 
-
 const styles = (theme) => ({
     root: {
         flexGrow: 1,
@@ -78,12 +77,13 @@ class App extends Component {
         const classes = this.props;
         return (
             <div className={classes.root}>
-                <AppBar position="static">
+                <AppBar position="sticky">
                     <Toolbar>
                         <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={this.handleDrawerToggle}>
-                            <MenuIcon />
+                            <MenuIcon/>
                         </IconButton>
                         <IconButton color="inherit" component={RouterLink} to="/">TRAINING BOT</IconButton>
+                        <div>
                         {this.state.isLogined ? (
                             <Button color="inherit" onClick={this.handleLogout}>Logout</Button>
                         ) : (
@@ -93,6 +93,7 @@ class App extends Component {
                                 </div>
                             )
                         }
+                        </div>
                     </Toolbar>
                 </AppBar>
                 <Drawer open={this.state.toggle}>
@@ -100,11 +101,7 @@ class App extends Component {
                     <MenuItem onClick={this.handleDrawerToggle}><Button color="inherit" component={RouterLink} to="/exercise">Exercise</Button></MenuItem>
                     <MenuItem onClick={this.handleDrawerToggle}><Button color="inherit" component={RouterLink} to="/community">Community</Button></MenuItem>
                 </Drawer>
-                {/* <ol>
-                    <li><Link component={RouterLink} to="/exercise">exercise</Link></li>
-                    <li><Link component={RouterLink} to="/community">community</Link></li>
-                    <li><Link component={RouterLink} to="/myPage">myPage</Link></li>
-                </ol> */}
+                
                 <Route exact path="/" component={Home} />
                 <Switch>
                     <Route path="/exercise/:kind/:cycle/:countPerCycle" component={TrainingBot} />
