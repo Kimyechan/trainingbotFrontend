@@ -99,7 +99,7 @@ class App extends Component {
                 <Drawer open={this.state.toggle}>
                     <MenuItem onClick={this.handleDrawerToggle}><Button color="inherit" component={RouterLink} to="/">Home</Button></MenuItem>
                     <MenuItem onClick={this.handleDrawerToggle}><Button color="inherit" component={RouterLink} to="/exercise">Exercise</Button></MenuItem>
-                    <MenuItem onClick={this.handleDrawerToggle}><Button color="inherit" component={RouterLink} to="/community">Community</Button></MenuItem>
+                    <MenuItem onClick={this.handleDrawerToggle}><Button color="inherit" component={RouterLink} to="/myPage">MyPage</Button></MenuItem>
                 </Drawer>
                 
                 <Route exact path="/" component={Home} />

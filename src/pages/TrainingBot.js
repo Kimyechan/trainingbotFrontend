@@ -187,7 +187,12 @@ class TrainingBot extends Component {
             this.setState({
                 status: 'wrong'
             })
-        }
+        } 
+        // else if(prediction[3].probability.toFixed(2) > 0.90){
+        //     this.setState({
+        //         status: 'nothing'
+        //     })
+        // }
 
         for (let i = 0; i < window.$maxPredictions; i++) {
             const classPrediction =
@@ -251,8 +256,8 @@ class TrainingBot extends Component {
                     {this.state.completed == this.state.countPerCycle && this.state.cycle != this.state.countCycle ?
                         <h2>{this.state.sec}초 휴식!!</h2> : ""
                     }
-                    <div><canvas id="canvas"></canvas></div>
-
+                <div><canvas id="canvas"></canvas></div>
+                <div id="label-container"></div>
                 <h2>CountCycle : {this.state.countCycle} / {this.props.match.params.cycle}</h2>
                 <h2>Count : {this.state.count} / {this.props.match.params.countPerCycle}</h2>
                 <h2>TotalCount : {this.state.countCycle * this.state.countPerCycle + this.state.count}</h2>
