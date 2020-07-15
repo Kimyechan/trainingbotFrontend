@@ -33,6 +33,10 @@ class Login extends Component {
         this.props.history.goBack();
     }
 
+    setToken(response) {
+        localStorage.setItem('accessToken', JSON.stringify(response.data.accessToken));
+        this.props.changeLoginState();
+    }
     handleSubmit(e) {
         e.preventDefault();
         this.handleLogin()
@@ -40,9 +44,17 @@ class Login extends Component {
                 (response) => {
                     localStorage.setItem('accessToken', JSON.stringify(response.data.accessToken));
                     this.props.changeLoginState();
-                },
-                this.props.history.push('/')
-            )
+                    this.props.history.push('/')
+                }).catch(error => {
+                    if (error.response.status === 401) {
+                        alert('아이디 혹은 비밀번호가 틀립니다.')
+                        this.props.history.push('/signin')
+                        this.setState({
+                            userId: '',
+                            password: ''
+                        })
+                    }
+                });
     }
 
     handleLogin() {
@@ -58,23 +70,23 @@ class Login extends Component {
 
     render() {
         return (
-        <div>
-            <div className="login">
-                <p>TRAINING BOT</p>
-                <div className="login_table">
-                    <div>
-                        <TableRow>
-                            <TextField type="text" label="ID" name="userId" value={this.state.userId} onChange={this.handleChange}></TextField>
-                        </TableRow>
-                        <TableRow>
-                            <TextField type="text" label="Password" name="password" value={this.state.password} onChange={this.handleChange}></TextField>
-                        </TableRow>
-                    </div>
+            <div>
+                <div className="login">
+                    <p>TRAINING BOT</p>
+                    <div className="login_table">
+                        <div>
+                            <TableRow>
+                                <TextField type="text" label="ID" name="userId" value={this.state.userId} onChange={this.handleChange}></TextField>
+                            </TableRow>
+                            <TableRow>
+                                <TextField type="text" label="Password" name="password" value={this.state.password} onChange={this.handleChange}></TextField>
+                            </TableRow>
+                        </div>
                         <button onClick={this.handleSubmit}>Login</button>
                         <button onClick={this.handlegoBack}>Close</button>
+                    </div>
                 </div>
             </div>
-        </div>
         )
     }
 }

@@ -41,6 +41,11 @@ class ExercisePurpose extends Component {
         }
         else{
             alert('숫자를 입력해주세요');
+            // this.setState({
+            //     cycle: "",
+            //     countPerCycle: ""
+            // })
+            // this.props.history.push("/exercisepurpose/"+this.state.name)
             return this.props.history.go(-1);
         }
     }

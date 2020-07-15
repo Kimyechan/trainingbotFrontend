@@ -217,6 +217,7 @@ class TrainingBot extends Component {
     }
 
     finish = () => {
+        console.log(window.$webcam)
         const url = "/api/saveExercise"
         const data = {
             kind: this.state.kind,
@@ -230,15 +231,20 @@ class TrainingBot extends Component {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('accessToken'))
             }
         };
-        if (!localStorage.getItem('accessToken')) {
-            window.$webcam.stop();
+        if(window.$webcam != undefined){
+            if (!localStorage.getItem('accessToken')) {
+                window.$webcam.stop();
+                this.props.history.push('/')
+                window.location.reload();
+            } else {
+                window.$webcam.stop();
+                post(url, data, config)
+                window.location.reload()
+                this.props.history.push('/')
+            }
+        } else {
             this.props.history.push('/')
             window.location.reload();
-        } else {
-            window.$webcam.stop();
-            post(url, data, config)
-            window.location.reload()
-            this.props.history.push('/')
         }
     }
 
