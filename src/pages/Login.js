@@ -33,10 +33,6 @@ class Login extends Component {
         this.props.history.goBack();
     }
 
-    setToken(response) {
-        localStorage.setItem('accessToken', JSON.stringify(response.data.accessToken));
-        this.props.changeLoginState();
-    }
     handleSubmit(e) {
         e.preventDefault();
         this.handleLogin()
