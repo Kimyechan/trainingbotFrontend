@@ -1,4 +1,6 @@
-.statistics {
-    display: grid;
-    grid-template-rows:  1fr 1fr;
+.page-explain{
+    text-align: center;
+}
+.choose-date{
+    margin-top: 100px;
 }

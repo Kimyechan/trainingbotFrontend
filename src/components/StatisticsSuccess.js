@@ -11,8 +11,6 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import { Animation } from '@devexpress/dx-react-chart';
 
-// import { confidence as data } from '../../../demo-data/data-vizualization';
-
 const format = () => tick => tick;
 const legendStyles = () => ({
   root: {
@@ -76,30 +74,60 @@ const TitleText = withStyles(titleStyles)(({ classes, ...props }) => (
 class StatisticsSuccess extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.calcAchievementRate = this.calcAchievementRate.bind(this);
+  }
+
+  calcAchievementRate() {
+    let data = this.props.exerciseList;
+    const rateMap = new Map();
+    let ratePerDate = [];
+
+    data.forEach(element => {
+      if(!rateMap.has(element.date)) {
+        rateMap.set(element.date, [element.count, element.purposeCount])
+      } 
+      else {
+        let tempData = rateMap.get(element.date);
+        rateMap.set(element.date, 
+          [element.count+tempData[0], element.purposeCount+tempData[1]])
+      }
+    });
+
+    rateMap.forEach((value, key) => {
+      ratePerDate.push({date: key, rate: (value[0] / value[1]) * 100})
+    })
+
+    ratePerDate.sort((x, y) => (x.date > y.date ? 1 : -1));
+    
+    return ratePerDate;
   }
 
   render() {
     const { classes } = this.props;
-
     return (
       <Paper>
         <Chart
-          data={this.props.exerciseList}
+          data={this.calcAchievementRate()}
           className={classes.chart}
         >
-          <ArgumentAxis tickFormat={format} />
+          {/* <ArgumentAxis tickFormat={format} />
+          <ValueAxis
+            max={100}
+            labelComponent={ValueLabel}
+          /> */}
+          <ArgumentAxis />
           <ValueAxis
             max={100}
             labelComponent={ValueLabel}
           />
           <LineSeries
-            name="count"
-            valueField="count"
+            name="rate"
+            valueField="rate"
             argumentField="date"
           />
           <Legend position="bottom" rootComponent={Root} itemComponent={Item} labelComponent={Label} />
           <Title
-            text={`Confidence in Institutions in American society ${'\n'}(Great deal)`}
+            text='Achivement Per date'
             textComponent={TitleText}
           />
           <Animation />
