@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, Link as RouterLink } from 'react-router-dom';
 
-import { withStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link'
 import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
@@ -11,7 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 
-import { Home } from 'pages';
+import Home  from '../pages/Home';
 import Exercise from '../pages/Exercise';
 import Community from '../pages/Community';
 import MyPage from '../pages/MyPage';
@@ -21,17 +20,17 @@ import Login from '../pages/Login';
 
 import ExercisePurpose from '../components/ExercisePurpose';
 
-const styles = (theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    title: {
-        flexGrow: 1,
-    },
-});
+// const styles = (theme) => ({
+//     root: {
+//         flexGrow: 1,
+//     },
+//     menuButton: {
+//         marginRight: theme.spacing(2),
+//     },
+//     title: {
+//         flexGrow: 1,
+//     },
+// });
 
 class App extends Component {
     constructor(props) {
@@ -74,12 +73,12 @@ class App extends Component {
     }
 
     render() {
-        const classes = this.props;
+
         return (
-            <div className={classes.root}>
+            <div className="">
                 <AppBar position="sticky">
                     <Toolbar>
-                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={this.handleDrawerToggle}>
+                        <IconButton edge="start" color="inherit" aria-label="menu" onClick={this.handleDrawerToggle}>
                             <MenuIcon/>
                         </IconButton>
                         <IconButton color="inherit" component={RouterLink} to="/">TRAINING BOT</IconButton>
@@ -124,4 +123,4 @@ class App extends Component {
     }
 }
 
-export default withStyles(styles)(App);
+export default App;
