@@ -60,7 +60,7 @@ class ExerciseForm extends Component {
                                         <Typography gutterBottom variant="h5" component="h2">
                                             {this.props.name}
                                         </Typography>
-                                        <Typography className={classes.content}variant="body2" color="textSecondary" component="p" align="left">
+                                        <Typography className={classes.content} variant="body2" color="textSecondary" component="p" align="left">
                                             {this.props.content}
                                         </Typography>
                                     </CardContent>

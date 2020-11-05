@@ -67,7 +67,7 @@ class SignUp extends Component {
                                 <TextField type="text" label="ID" name="userId" value={this.state.userId} onChange={this.handleValueChange}></TextField>
                             </TableRow>
                             <TableRow>
-                                <TextField type="text" label="Password" name="password" value={this.state.password} onChange={this.handleValueChange}></TextField>
+                                <TextField type="password" label="Password" name="password" value={this.state.password} onChange={this.handleValueChange}></TextField>
                             </TableRow>
                             <TableRow>
                                 <TextField type="text" label="Name" name="name" value={this.state.name} onChange={this.handleValueChange}></TextField>

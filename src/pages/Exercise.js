@@ -43,10 +43,6 @@ class Exercise extends Component {
             <div>
                 <div className="exercise_nav">
                     <div className="exercise_innerNav">
-                        {/* <button className="exercise_innerbutton" value="Squat" onClick={this.handleExerciseName}>Squat</button>
-                        <button className="exercise_innerbutton" value="PushUp" onClick={this.handleExerciseName}>PushUp</button>
-                        <button className="exercise_innerbutton" value="sideLateralRaise" onClick={this.handleExerciseName}>SideLateral</button>
-                        <button className="exercise_innerbutton" value="lunge" onClick={this.handleExerciseName}>Lunge</button> */}
                         <Button size="large" variant="outlined" color="primary" className="exercise_innerbutton" value="Squat" onClick={this.handleExercise}>Squat</Button>
                         <Button size="large" variant="outlined" color="primary" className="exercise_innerbutton" value="PushUp" onClick={this.handleExercise}>PushUp</Button>
                         <Button size="large" variant="outlined" color="primary" className="exercise_innerbutton" value="sideLateralRaise" onClick={this.handleExercise}>SideLateral</Button>

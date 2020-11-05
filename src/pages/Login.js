@@ -75,7 +75,7 @@ class Login extends Component {
                                 <TextField type="text" label="ID" name="userId" value={this.state.userId} onChange={this.handleChange}></TextField>
                             </TableRow>
                             <TableRow>
-                                <TextField type="text" label="Password" name="password" value={this.state.password} onChange={this.handleChange}></TextField>
+                                <TextField type="password" label="Password" name="password" value={this.state.password} onChange={this.handleChange}></TextField>
                             </TableRow>
                         </div>
                         <button onClick={this.handleSubmit}>Login</button>

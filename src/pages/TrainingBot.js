@@ -6,11 +6,11 @@ import countOutput from '../lib/sideLateralRaise';
 import * as tf from '@tensorflow/tfjs';
 import * as tmPose from '@teachablemachine/pose';
 import { post } from 'axios';
-import { TableRow, TextField } from '@material-ui/core';
+import { Button, Paper, Grid, TableRow, TextField, Typography } from '@material-ui/core';
 
 import Exercise from './Exercise';
 
-import "../css/exercise.css";
+// import "../css/exercise.css";
 
 class TrainingBot extends Component {
     constructor(props) {
@@ -187,7 +187,7 @@ class TrainingBot extends Component {
             this.setState({
                 status: 'wrong'
             })
-        } 
+        }
         // else if(prediction[3].probability.toFixed(2) > 0.90){
         //     this.setState({
         //         status: 'nothing'
@@ -231,7 +231,7 @@ class TrainingBot extends Component {
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('accessToken'))
             }
         };
-        if(window.$webcam != undefined){
+        if (window.$webcam != undefined) {
             if (!localStorage.getItem('accessToken')) {
                 window.$webcam.stop();
                 this.props.history.push('/')
@@ -251,26 +251,81 @@ class TrainingBot extends Component {
     render() {
 
         return (
-            <div style={{width:'1000px', height:'800px', margin: 'auto auto'}}>
-                    <div className="exercise_head">
-                        <img style={{ width: '150px', height: '100px' }} src={"/image/" + this.state.kind + ".png"}></img>
+            // <div style={{ width: '1000px', height: '800px', margin: 'auto auto' }}>
+            <div>
+                <div className="exercise_head">
+                    {/* <img style={{ width: '150px', height: '100px' }} src={"/image/" + this.state.kind + ".png"X}></img> */}
+                    <Typography variant='h2' color="primary">
                         {this.state.kind}
-                    </div>
-
-                <div className="doexercise_view">
-                    <h2>Start 버튼을 누른뒤 10초 뒤에 시작합니다.</h2>
-                    {this.state.completed == this.state.countPerCycle && this.state.cycle != this.state.countCycle ?
-                        <h2>{this.state.sec}초 휴식!!</h2> : ""
-                    }
-                <div><canvas id="canvas"></canvas></div>
-                <div id="label-container"></div>
-                <h2>CountCycle : {this.state.countCycle} / {this.props.match.params.cycle}</h2>
-                <h2>Count : {this.state.count} / {this.props.match.params.countPerCycle}</h2>
-                <h2>TotalCount : {this.state.countCycle * this.state.countPerCycle + this.state.count}</h2>
-                    <button type="button" onClick={this.init}>Start</button>
-                    <button type="button" onClick={this.finish}>Finish</button>
+                    </Typography>
                 </div>
-            </div>
+                {/* <div className="doexercise_view"> */}
+
+                {/* <h2>Start 버튼을 누른뒤 10초 뒤에 시작합니다.</h2>
+                        {this.state.completed == this.state.countPerCycle && this.state.cycle != this.state.countCycle ?
+                            <h2>{this.state.sec}초 휴식!!</h2> : ""
+                        }
+                        <div><canvas id="canvas"></canvas></div>
+                        <div id="label-container"></div>
+                        <h2>CountCycle : {this.state.countCycle} / {this.props.match.params.cycle}</h2>
+                        <h2>Count : {this.state.count} / {this.props.match.params.countPerCycle}</h2>
+                        <h2>TotalCount : {this.state.countCycle * this.state.countPerCycle + this.state.count}</h2>
+                        <button type="button" onClick={this.init}>Start</button>
+                        <button type="button" onClick={this.finish}>Finish</button> */}
+                <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="flex-start"
+                    spacing={5}
+                >
+                    <Grid item xs={6}>
+                        <Paper>
+                            <Typography variant='h4' color="primary" align="center">
+                                Right Post
+                            </Typography>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="center"
+                                alignItems="center"
+                                spacing={5}>
+                                <Grid container item justify="center" alignItems="center" xs={4}>
+                                    <Typography variant='h5' color="primary" align="center">UP Post</Typography>
+                                    <img src={"/image/" + this.state.kind + "/Up.png"} alt="up"></img>
+                                </Grid>
+                                <Grid container justify="center" alignItems="center" item xs={4}>
+                                    <Typography variant='h5' color="primary" align="center">DOWN Post</Typography>
+                                    <img src={"/image/" + this.state.kind + "/Down.png"} alt="down"></img>
+                                </Grid>
+                            </Grid>
+                            <Typography variant="h5" color="textPrimary" align="center">
+                                If You exercise similar to pose image, you success exercising <br />
+                                If not, AI never count your exercise
+                            </Typography>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Paper>
+                            <div><canvas id="canvas"></canvas></div>
+                            <div id="label-container"></div>
+                        </Paper>
+                        <Paper>
+                            <h2>CountCycle : {this.state.countCycle} / {this.props.match.params.cycle}</h2>
+                            <h2>Count : {this.state.count} / {this.props.match.params.countPerCycle}</h2>
+                            <h2>TotalCount : {this.state.countCycle * this.state.countPerCycle + this.state.count}</h2>
+                            <h2>Start 버튼을 누른뒤 10초 뒤에 시작합니다.</h2>
+                            {this.state.completed == this.state.countPerCycle && this.state.cycle != this.state.countCycle ?
+                                <h2>{this.state.sec}초 휴식!!</h2> : ""
+                            }
+                            <Button size="large" variant="outlined" color="primary" onClick={this.init}>Start</Button>
+                            <Button size="large" variant="outlined" color="primary" onClick={this.finish}>Finish</Button>
+                        </Paper>
+                    </Grid>
+                </Grid>
+                {/* </div> */}
+
+            </div >
         )
     }
 }
